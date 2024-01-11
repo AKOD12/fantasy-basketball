@@ -73,9 +73,10 @@ def main():
 
     # combine 'Wins' and 'Losses' back into 'Record'
     df_new['Record'] = df_new['Wins'].astype(str) + '-' + df_new['Losses'].astype(str)
+    
 
     # drop the 'Wins' and 'Losses' columns
-    df_new.drop(['Wins', 'Losses'], axis=1, inplace=True)
+    df_new.drop(['Wins', 'Losses', 'Total Weeks'], axis=1, inplace=True)
     df_new.index = df_new.index + 1
     
     df_new = df_new.round()
