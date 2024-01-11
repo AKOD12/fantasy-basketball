@@ -82,11 +82,16 @@ def main():
     # drop the 'Wins' and 'Losses' columns
     df_new.drop(['Wins', 'Losses'], axis=1, inplace=True)
     df_new.index = df_new.index + 1
-    df_rounded = df_new.round()
+    
+    df_new = df_new.round()
+    df_new['PF'] = df_new['PF'].round(0).astype(int)
+    df_new['PA'] = df_new['PA'].round(0).astype(int)
+    df_new['PF/Wk'] = df_new['PF/Wk'].round(0).astype(int)
+    df_new['PA/Wk'] = df_new['PA/Wk'].round(0).astype(int)
 
 
     # streamlit stuff
-    styled_df = df_rounded.style.apply(highlight_top_four)
+    styled_df = df_new.style.apply(highlight_top_four)
     st.title("White Man Can't Jump Standings")
     st.write("PF and PA include the current week's points")
     st.write("Rish is a bot and fat")
