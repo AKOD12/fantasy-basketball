@@ -4,9 +4,6 @@ from datetime import datetime, timedelta
 import pytz
 import streamlit as st
 
-def highlight_top_four(s):
-    return ['background-color: green' if i < 4 else '' for i in range(len(s))]
-
 def main():
     # api connection
     league_id = 1800187247
@@ -61,14 +58,12 @@ def main():
             cumulative_points_against[boxscore.away_team.team_name] += boxscore.home_score
 
     df_new['PF'] = df_new['Team'].map(cumulative_points)
-    df_new['PA'] = df_new['Team'].map(cumulative_points_against)
 
     # calculate the total weeks from the 'Record' column
     df_new['Total Weeks'] = df_new['Record'].apply(lambda x: sum(map(int, x.split('-'))))
 
     # calculate average points scored and points against
     df_new['PF/Wk'] = df_new['Team'].map(cumulative_points).div(df_new['Total Weeks'])
-    df_new['PA/Wk'] = df_new['Team'].map(cumulative_points_against).div(df_new['Total Weeks'])
 
     # split 'Record' into 'Wins' and 'Losses' for sorting
     df_new[['Wins', 'Losses']] = df_new['Record'].str.split('-', expand=True).astype(int)
@@ -85,17 +80,20 @@ def main():
     
     df_new = df_new.round()
     df_new['PF'] = df_new['PF'].round(0).astype(int)
-    df_new['PA'] = df_new['PA'].round(0).astype(int)
     df_new['PF/Wk'] = df_new['PF/Wk'].round(0).astype(int)
-    df_new['PA/Wk'] = df_new['PA/Wk'].round(0).astype(int)
 
 
     # streamlit stuff
-    styled_df = df_new.style.apply(highlight_top_four)
     st.title("White Man Can't Jump Standings")
-    st.write("PF and PA include the current week's points")
+    st.write("PF includes the current week's points")
     st.write("Rish is a bot and fat")
-    st.write(styled_df.to_html(escape=False), unsafe_allow_html=True)
+    # highlight the top four rows
+    def color_top_four(val):
+        color = 'green' if val.name < 5 else 'default'
+        return [f'background-color: {color}' if color != 'default' else '' for _ in val]
+
+    #aApply the highlighting function and display the dataframe
+    st.dataframe(df_new.style.apply(color_top_four, axis=1))
 
 if __name__ == "__main__":
     main()
