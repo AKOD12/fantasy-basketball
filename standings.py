@@ -121,24 +121,26 @@ def main():
     df_new[['Wins', 'Losses']] = df_new['Record'].str.split('-', expand=True).astype(int)
     df_new.sort_values(by=['Wins', 'PF'], ascending=[False, False], inplace=True)
 
-    # drop unnecessary columns
+    # combine 'Wins' and 'Losses' back into 'Record'
+    df_new['Record'] = df_new['Wins'].astype(str) + '-' + df_new['Losses'].astype(str)
+    
+
+    # drop the 'Wins' and 'Losses' columns
     df_new.drop(['Wins', 'Losses', 'Total Weeks'], axis=1, inplace=True)
     df_new = df_new.round()
     df_new['PF'] = df_new['PF'].astype(int).round(1)
     df_new['PF/Wk'] = df_new['PF/Wk'].astype(int).round(1)
 
-    # streamlit code for displaying the DataFrame
-    st.title("Fantasy Basketball League Standings")
-    st.write("PF includes the current week's points. Playoff chances are estimated probabilities.")
-
-    # reset the index
-    df_new.reset_index(drop=True, inplace=True)
-    df_new.index += 1
-
+    # streamlit stuff
+    st.title("White Man Can't Jump Standings")
+    st.write("PF includes the current week's points")
+    st.write("Rish is a bot and fat")
     # highlight the top four rows
     def color_top_four(val):
-        color = 'green' if val.name < 5 else 'none'
-        return [f'background-color: {color}' if color != 'none' else '' for _ in val]
+        color = 'green' if val.name < 5 else 'default'
+        return [f'background-color: {color}' if color != 'default' else '' for _ in val]
+
+    #aApply the highlighting function and display the dataframe
     st.dataframe(df_new.style.apply(color_top_four, axis=1))
 
 if __name__ == "__main__":
