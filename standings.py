@@ -32,7 +32,7 @@ def calculate_strength_of_schedule(team, remaining_schedule, team_strengths):
     return opponents_strength / len(remaining_schedule)
 
 # simulate the season
-def simulate_season(remaining_schedule, team_strengths, current_standings, simulations=1000, randomness_factor=0.05):
+def simulate_season(remaining_schedule, team_strengths, current_standings, simulations=10000, randomness_factor=0.05):
     playoff_chances = {team: 0 for team in team_strengths}
     for _ in range(simulations):
         standings = current_standings.copy()
@@ -121,26 +121,25 @@ def main():
     df_new[['Wins', 'Losses']] = df_new['Record'].str.split('-', expand=True).astype(int)
     df_new.sort_values(by=['Wins', 'PF'], ascending=[False, False], inplace=True)
 
-    # combine 'Wins' and 'Losses' back into 'Record'
-    df_new['Record'] = df_new['Wins'].astype(str) + '-' + df_new['Losses'].astype(str)
-    
-
-    # drop the 'Wins' and 'Losses' columns
+    # drop unnecessary columns
     df_new.drop(['Wins', 'Losses', 'Total Weeks'], axis=1, inplace=True)
     df_new = df_new.round()
     df_new['PF'] = df_new['PF'].astype(int).round(1)
     df_new['PF/Wk'] = df_new['PF/Wk'].astype(int).round(1)
 
-    # streamlit stuff
+    # streamlit code for displaying the DataFrame
     st.title("White Man Can't Jump Standings")
-    st.write("PF includes the current week's points")
     st.write("Rish is a bot and fat")
+    st.write("PF includes the current week's points. Playoff chances are estimated probabilities.")
+
+    # reset the index
+    df_new.reset_index(drop=True, inplace=True)
+    df_new.index += 1
+
     # highlight the top four rows
     def color_top_four(val):
-        color = 'green' if val.name < 5 else 'default'
-        return [f'background-color: {color}' if color != 'default' else '' for _ in val]
-
-    #aApply the highlighting function and display the dataframe
+        color = 'green' if val.name < 5 else 'none'
+        return [f'background-color: {color}' if color != 'none' else '' for _ in val]
     st.dataframe(df_new.style.apply(color_top_four, axis=1))
 
 if __name__ == "__main__":
