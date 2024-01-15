@@ -70,7 +70,6 @@ def main():
 
     # sort dataFrame by 'Wins' and then by 'PF'
     df_new.sort_values(by=['Wins', 'PF'], ascending=[False, False], inplace=True)
-
     # combine 'Wins' and 'Losses' back into 'Record'
     df_new['Record'] = df_new['Wins'].astype(str) + '-' + df_new['Losses'].astype(str)
     
@@ -88,12 +87,15 @@ def main():
     st.title("White Man Can't Jump Standings")
     st.write("PF includes the current week's points")
     st.write("Rish is a bot and fat")
-    # highlight the top four rows
-    def color_top_four(val):
-        color = 'green' if val.name < 5 else 'default'
-        return [f'background-color: {color}' if color != 'default' else '' for _ in val]
 
-    #aApply the highlighting function and display the dataframe
+    # reset the index
+    df_new.reset_index(drop=True, inplace=True)
+    df_new.index += 1
+
+    # highlight the top four rows not hardcoded
+    def color_top_four(val):
+        color = 'green' if val.name < 5 else 'none'  # val.name is the index after reset
+        return [f'background-color: {color}' if color != 'none' else '' for _ in val]
     st.dataframe(df_new.style.apply(color_top_four, axis=1))
 
 if __name__ == "__main__":
