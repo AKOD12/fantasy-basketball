@@ -62,7 +62,7 @@ def main():
 
     # manual data import cause rish screwed it all up
     data = {
-        "Team": ["Thunderstruck", "White Lightning", "Chef Curry", "Mark Will made it", "TJ's Tall Boys", "Bucksketball", "LameloBawl", "Bum Squad", "Tel Aviv Basketball Club", "Team Srivastava"],
+        "Team": ["Thunderstruck", "White Lightning", "Chef Curry", "Mark Will didnt make it", "TJ's Tall Boys", "Bucksketball", "LameloBawl", "Bum Squad", "Tel Aviv Basketball Club", "Team Srivastava"],
         "Record": ["9-3", "9-3", "8-4", "6-6", "7-5", "6-6", "5-7", "4-8", "4-8", "2-10"]
     }
     df_new = pd.DataFrame(data)
