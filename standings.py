@@ -32,8 +32,13 @@ def calculate_strength_of_schedule(team, remaining_schedule, team_strengths):
     return opponents_strength / len(remaining_schedule)
 
 # simulate the season
-def simulate_season(remaining_schedule, team_strengths, current_standings, simulations=10000, randomness_factor=0.05):
+def simulate_season(remaining_schedule, team_strengths, current_standings, total_weeks=20, simulations=10000, randomness_factor=0.05):
     playoff_chances = {team: 0 for team in team_strengths}
+    last_place_chances = {team: 0 for team in team_strengths}
+
+    # teams that cannot mathematically finish last
+    mathematically_safe_from_last = {team for team, wins in current_standings.items() if wins > total_weeks / 2}
+
     for _ in range(simulations):
         standings = current_standings.copy()
         for week in remaining_schedule:
@@ -45,12 +50,23 @@ def simulate_season(remaining_schedule, team_strengths, current_standings, simul
                     standings[team1] += 1
                 else:
                     standings[team2] += 1
+
         top_teams = sorted(standings, key=standings.get, reverse=True)[:4]
         for team in top_teams:
             playoff_chances[team] += 1
+
+        last_place_team = sorted(standings, key=standings.get)[0]
+        last_place_chances[last_place_team] += 1
+
     for team in playoff_chances:
         playoff_chances[team] = (playoff_chances[team] / simulations) * 100
-    return playoff_chances
+        if team in mathematically_safe_from_last:
+            last_place_chances[team] = 0  #set to 0 for teams mathematically safe from last
+        else:
+            last_place_chances[team] = (last_place_chances[team] / simulations) * 100
+
+    return playoff_chances, last_place_chances
+
 
 def main():
     # api stuff
@@ -99,22 +115,15 @@ def main():
     df_new['Total Weeks'] = df_new['Record'].apply(lambda x: sum(map(int, x.split('-'))))
     df_new['PF/Wk'] = (df_new['PF'] / df_new['Total Weeks']).round(1)
     
-    # format the 'Playoff Chance %' column for <1%
-    def format_playoff_chances(chance):
-        if chance < 1:
-            return "<1%"
-        else:
-            return f"{chance:.1f}%"
-
 
     # current standings from the DataFrame
     current_standings = {row["Team"]: int(row["Record"].split('-')[0]) for index, row in df_new.iterrows()}
 
-    # playoff probabilities
-    playoff_probabilities = simulate_season(remaining_schedule, team_strengths, current_standings)
+    playoff_probabilities, last_place_probabilities = simulate_season(remaining_schedule, team_strengths, current_standings)
 
     # add probabilities to DataFrame
-    df_new['Playoff Chance %'] = df_new['Team'].map(playoff_probabilities).map(format_playoff_chances)
+    df_new['Playoff Chance %'] = df_new['Team'].map(playoff_probabilities).apply(lambda x: f"{x:.1f}%" if x >= 1 else ("<1%" if x > 0 else "0%"))
+    df_new['Last Place Chance %'] = df_new['Team'].map(last_place_probabilities).apply(lambda x: f"{x:.1f}%" if x >= 1 else ("<1%" if x > 0 else "0%"))
 
 
     # sort DataFrame by wins and then by PF
