@@ -122,8 +122,8 @@ def main():
     playoff_probabilities, last_place_probabilities = simulate_season(remaining_schedule, team_strengths, current_standings)
 
     # add probabilities to DataFrame
-    df_new['Playoff Chance %'] = df_new['Team'].map(playoff_probabilities).apply(lambda x: f"{x:.1f}%" if x >= 1 else ("<1%" if x > 0 else "0%"))
-    df_new['Last Place Chance %'] = df_new['Team'].map(last_place_probabilities).apply(lambda x: f"{x:.1f}%" if x >= 1 else ("<1%" if x > 0 else "0%"))
+    df_new['Playoff Chance %'] = df_new['Team'].map(playoff_probabilities).apply(lambda x: f"{x:.1f}%" if x >= 1 else ("<0.1%" if x > 0 else "0%"))
+    df_new['Last Place Chance %'] = df_new['Team'].map(last_place_probabilities).apply(lambda x: f"{x:.1f}%" if x >= 1 else ("<0.1%" if x > 0 else "0%"))
 
 
     # sort DataFrame by wins and then by PF
