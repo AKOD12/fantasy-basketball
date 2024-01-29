@@ -79,7 +79,7 @@ def main():
     # manual data import cause rish screwed it all up
     data = {
         "Team": ["Thunderstruck", "White Lightning", "Ant-Man and the BI", "Mark Will didnt make it", "TJ's Tall Boys", "Bucksketball", "LameloBawl", "Bum Squad", "Tel Aviv Basketball Club", "Team Srivastava"],
-        "Record": ["10-3", "10-3", "8-5", "6-7", "7-6", "7-6", "6-7", "4-9", "5-8", "2-11"]
+        "Record": ["11-3", "11-3", "8-6", "7-7", "7-7", "8-6", "6-8", "4-10", "6-8", "2-12"]
     }
     df_new = pd.DataFrame(data)
     current_date = datetime.now(pytz.timezone('US/Eastern'))
