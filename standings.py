@@ -78,15 +78,15 @@ def main():
 
     # manual data import cause rish screwed it all up
     data = {
-        "Team": ["Thunderstruck", "White Lightning", "Ant-Man and the BI", "Mark Will didnt make it", "TJ's Tall Boys", "Bucksketball", "LameloBawl", "Bum Squad", "Tel Aviv Basketball Club", "Team Srivastava"],
-        "Record": ["12-3", "11-4", "8-7", "7-8", "7-8", "9-6", "7-8", "5-10", "6-9", "3-12"]
+        "Team": ["Thunderstruck", "White Lightning", "Ant-Man and the BI", "Mark Will didnt make it", "TJ's Tall Boys", "Bucksketball", "LameloBawl", "Bum Squad", "Tel Aviv Basketball Club", "Bibliomaniacs"],
+        "Record": ["13-3", "12-4", "9-7", "7-9", "7-9", "10-6", "7-9", "5-11", "6-10", "4-12"]
     }
     df_new = pd.DataFrame(data)
     current_date = datetime.now(pytz.timezone('US/Eastern'))
 
     # weeks since the start of the season
     season_start_date = datetime(2023, 10, 24, tzinfo=pytz.timezone('US/Eastern'))
-    num_weeks = ((current_date - season_start_date).days // 7) + 1
+    num_weeks = ((current_date - season_start_date).days // 7)
 
     # weekly points data for each team
     weekly_team_points = {team.team_name: [0]*num_weeks for team in league.teams}
