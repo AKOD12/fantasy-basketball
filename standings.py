@@ -85,8 +85,7 @@ def main():
     current_date = datetime.now(pytz.timezone('US/Eastern'))
 
     # weeks since the start of the season
-    season_start_date = datetime(2023, 10, 24, tzinfo=pytz.timezone('US/Eastern'))
-    num_weeks = ((current_date - season_start_date).days // 7) - 1
+    num_weeks = 19
 
     # weekly points data for each team
     weekly_team_points = {team.team_name: [0]*num_weeks for team in league.teams}
