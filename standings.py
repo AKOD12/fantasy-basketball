@@ -78,8 +78,8 @@ def main():
 
     # manual data import cause rish screwed it all up
     data = {
-        "Team": ["Thunderstruck", "White Lightning", "Ant-Man and the BI", "Mark Will didnt make it", "TJ's Tall Boys", "Bucksketball", "LameloBawl", "Bum Squad", "Tel Aviv Basketball Club", "Bibliomaniacs"],
-        "Record": ["13-5", "14-4", "10-8", "7-11", "9-9", "11-7", "7-11", "7-11", "6-12", "6-12"]
+        "Team": ["Thunderstruck", "White Lightning", "Ant-Man and the BI", "the twins", "TJ's Tall Boys", "Bucksketball", "LameloBawl", "Bum Squad", "Tel Aviv Basketball Club", "Bibliomaniacs"],
+        "Record": ["13-6", "15-4", "10-9", "8-11", "9-10", "12-7", "8-11", "8-11", "6-13", "6-13"]
     }
     df_new = pd.DataFrame(data)
     current_date = datetime.now(pytz.timezone('US/Eastern'))
